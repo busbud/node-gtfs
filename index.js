@@ -4,6 +4,8 @@ var config = require('./config'),
     express = require('express'),
     app = express();
 
+app.use(express.basicAuth(process.env.user, process.env.password));
+
 config(app);
 routes(app);
 
