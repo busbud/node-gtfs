@@ -1,4 +1,4 @@
-var gtfs = require('../../');
+var gtfs = require('./lib/gtfs');
 
 module.exports = function routes(app){
   
