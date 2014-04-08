@@ -1,1 +1,1 @@
-web: node examples/express/index.js
+web: node index.js
