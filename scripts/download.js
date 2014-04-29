@@ -13,7 +13,7 @@ require('../models/StopTime');
 require('../models/Trip');
 var mongoose = require('mongoose');
 
-var db = mongoose.connect(process.env.MONGO_URL);
+var db = mongoose.connect(process.env.MONGOHQ_URL);
 
 var StopTime = db.model('StopTime')
     , Trip = db.model('Trip');
@@ -58,7 +58,7 @@ var GTFSFiles = [
 ];
 
 //open database and create queue for agency list
-Db.connect(process.env.MONGO_URL, {w: 1}, function (err, db) {
+Db.connect(process.env.MONGOHQ_URL, {w: 1}, function (err, db) {
     if (err) {
         console.log(err);
         process.exit(1);
