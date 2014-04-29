@@ -32,6 +32,7 @@
     , "request": "= 2.x.x"
     , "underscore": "= 1.4.x"
     , "unzip": "= 0.1.x"
+    , "lodash": "= 2.x"
   },
   "keywords": ["transit","gtfs","transportation"],
   "repository": "git://github.com/brendannee/node-gtfs",

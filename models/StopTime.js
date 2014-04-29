@@ -11,4 +11,14 @@ var mongoose = require('mongoose')
       , pickup_type       :  { type: String }
       , drop_off_type     :  { type: String }
       , shape_dist_traveled :  { type: String }
+      , trip              : { agency_key        :  { type: String, index: true }
+                            , route_id          :  { type: String, index: true }
+                            , service_id        :  { type: String, index: true }
+                            , trip_id           :  { type: String }
+                            , trip_headsign     :  { type: String }
+                            , trip_short_name   :  { type: String }
+                            , direction_id      :  { type: Number, index: true, min:0, max:1 }
+                            , block_id          :  { type: String }
+                            , shape_id          :  { type: String }
+                            }
     }));

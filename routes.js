@@ -42,6 +42,16 @@ module.exports = function routes(app) {
         });
     });
 
+    app.get('/api/trips/:agency/:origin/:destination/:date', function (req, res){
+        var agency_key = req.params.agency;
+        var origin = req.params.origin;
+        var dest = req.params.destination;
+        var date = req.params.date;
+        gtfs.getTrips(agency_key, origin, dest, date, function(e, data) {
+            res.send(data || {error: 'No trips for agency_key ' + agency_key});
+        })
+    });
+
     //List of destinations that can be reached from the origin
     app.get('/api/destinations/:agency/:origin', function (req, res) {
         var agency_key = req.params.agency;

@@ -9,6 +9,15 @@ var request = require('request')
     , Db = require('mongodb').Db
     , q;
 
+require('../models/StopTime');
+require('../models/Trip');
+var mongoose = require('mongoose');
+
+var db = mongoose.connect(process.env.MONGO_URL);
+
+var StopTime = db.model('StopTime')
+    , Trip = db.model('Trip');
+
 var GTFSFiles = [
     {
         fileNameBase: 'agency', collection: 'agencies'
@@ -89,7 +98,8 @@ Db.connect(process.env.MONGO_URL, {w: 1}, function (err, db) {
             removeDatabase,
             importFiles,
             postProcess,
-            cleanupFiles
+            cleanupFiles,
+            mergeStopTimeTrip
         ], function (e, results) {
             console.log(e || agency_key + ': Completed')
             cb();
@@ -251,6 +261,21 @@ Db.connect(process.env.MONGO_URL, {w: 1}, function (err, db) {
         function updatedDate(cb) {
             db.collection('agencies')
                 .update({agency_key: agency_key}, {$set: {date_last_updated: Date.now()}}, cb);
+        }
+
+        function mergeStopTimeTrip(cb) {
+            console.log(agency_key + ':  Merging tables');
+            StopTime.find(function (error, results){
+                async.eachLimit(results, 10, function(result, cb){
+                    Trip.findOne({trip_id: result.trip_id}, function (err, trip){
+                        result.trip = trip;
+                        result.save(function(err){ if (err) console.log(err);});
+                        cb();
+                    });
+                }, function(error){
+                    cb(error, 'merge_stoptimes_trip')
+                });
+            });
         }
     }
 });
