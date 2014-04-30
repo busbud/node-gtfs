@@ -10,18 +10,11 @@ node-GTFS loads transit data in [GTFS format](https://developers.google.com/tran
 
 `npm install`
 
+All routes are secured with Basic Auth so create two environment variables called `user` and `password`.
+
 ##Configuration for loading data
 
-Before you can use node-GTFS you must specify agencies to download from GTFS Data Exchange. You need the `dataexchange_id` for each agency you want to include from [GTFS Data Exchange](http://www.gtfs-data-exchange.com/) - it is in the URL of each individual transit agency's page.
-
-A full list of agencies is available via the [GTFS Data Exchange API](http://www.gtfs-data-exchange.com/api/agencies).
-
-For example, Austin Capital Metro is `capital-area-transit`, Washington DC is `wmata`.
-
-Add the list of agency keys you'd like to support to config.js as an array called `agencies`
-
-The mongodb URI is also configured in `config.js`. Default database URI is:
-`mongodb://localhost:27017/gtfs`
+The data sources are defined in the MongoDB. When data is loaded, it looks for a collection called `file_urls`. Each document in this collection has two fields: `agency_key` which is the name of the agency and `url` which is the url at which the zip file containing all the GTFS documents is located.
 
 ###To load data
 
@@ -29,72 +22,23 @@ The mongodb URI is also configured in `config.js`. Default database URI is:
 
 To keep schedules up to date, you might want to schedule this to occur once per day.
 
-##Example Application
-
-There is an example web app that creates some restful API endpoints and has a simple frontend for viewing transit data.  It is in examples/express.  You could load the example site with:
-
-    node ./examples/express/index.js
-
 ##Endpoints
 
-###List agencies
+###List all Stops an agency has
 
-    /api/agencies
+    /api/destinations/:agency
 
-###List agencies near a point
+###List all Destinations that can be reached from an agency's origin stop
 
-    /api/agenciesNearby/:lat/:lon/:radius
-    
-    //Example
-    /api/agenciesNearby/37.73/-122.25/10
-`:radius` is optional and in miles.  Default: 25 miles
-Returns all agencies that serve the 100 nearest stops within the specified radius
+    /api/destinations/:agency/:origin
 
-###List routes for an agency
+###List all trips between two stops on a given date
 
-    /api/routes/:agency
-    
-    //Example
-    /api/routes/san-francisco-municipal-transportation-agency
-
-###List routes near a point
-
-    /api/routesNearby/:lat/:lon/:radius
-    
-    //Example
-    /api/routesNearby/37.73/-122.25/0.25
-`:radius` is optional and in miles.  Default: 1 mile
-Returns all routes that stop at the 100 nearest stops within the specified radius
-
-###List stops for a route
-
-    /api/stops/:agency/:route_id/:direction_id
-    
-    //Example
-    /api/stops/san-francisco-municipal-transportation-agency/34/1
-`:direction_id` is optional
-
-###List stops near a point
-
-    /api/stopsNearby/:lat/:lon/:radius
-    
-    //Example
-    /api/StopsNearby/37.73/-122.25/0.25
-`:radius` is optional and in miles.  Default: 1 mile
-Returns the 100 nearest stops within the specified radius
-
-###List stop times for a stop
-
-    /api/times/:agency/:route_id/:stop_id/:direction_id
-    
-    //Example
-    /api/times/san-francisco-municipal-transportation-agency/34/1256/0
-`:direction_id` is optional
-
+   /api/trips/:agency/:origin/:destination/:date
 
 ##Hosting the Example App with Heroku and MongoHQ
 
-A `Procfile` is already in the repo pointing to the example app in `examples/express`.
+A `Procfile` is already in the repo.
 
 Create app on Heroku
 
