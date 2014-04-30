@@ -4,10 +4,8 @@ module.exports = function(app){
   app.configure(function(){
     this.use(express.cookieParser())
         .use(express.bodyParser())
-        .set('public', __dirname + '/public')
         .enable('jsonp callback')
         .enable('error templates')
-        .use(express.static(__dirname + '/public'))
   });
 
   // Dev
