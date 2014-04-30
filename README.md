@@ -34,7 +34,7 @@ To keep schedules up to date, you might want to schedule this to occur once per 
 
 ###List all trips between two stops on a given date
 
-   /api/trips/:agency/:origin/:destination/:date
+    /api/trips/:agency/:origin/:destination/:date
 
 ##Hosting the Example App with Heroku and MongoHQ
 
