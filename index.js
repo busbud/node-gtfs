@@ -2,9 +2,11 @@
 var config = require('./config'),
     routes = require('./routes'),
     express = require('express'),
+    raven = require('raven'),
     app = express();
 
 app.use(express.basicAuth(process.env.user, process.env.password));
+app.use(raven.middleware.express());
 
 config(app);
 routes(app);
