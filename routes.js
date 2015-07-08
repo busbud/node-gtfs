@@ -63,6 +63,7 @@ module.exports = function routes(app) {
   app.all('*', function notFound(req, res) {
 
     res.contentType('application/json');
+    res.status(404);
     res.send({
       error: 'No API call specified'
     });
