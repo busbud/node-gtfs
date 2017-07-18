@@ -136,7 +136,11 @@ Db.connect(process.env.MONGOHQ_URL, {w: 1}, function (err, db) {
                 console.log(agency_key + ': Download successful');
 
                 fs.createReadStream(downloadDir + '/latest.zip')
-                    .pipe(unzip.Extract({ path: downloadDir }).on('close', cb))
+                    .pipe(unzip.Extract({ path: downloadDir })
+                    .on('close', function(err) {
+                      console.log('Done extracting');
+                      cb(err);
+                    }))
                     .on('error', handleError);
             }
         }
