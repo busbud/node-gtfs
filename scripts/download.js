@@ -126,6 +126,7 @@ Db.connect(process.env.MONGOHQ_URL, {w: 1}, function (err, db) {
 
         function downloadFiles(cb) {
             //do download
+            console.log('Downloading: ' + agency_url);
             request(agency_url, processFile).pipe(fs.createWriteStream(downloadDir + '/latest.zip'));
 
             function processFile(e, response, body) {
@@ -143,6 +144,7 @@ Db.connect(process.env.MONGOHQ_URL, {w: 1}, function (err, db) {
 
         function removeDatabase(cb) {
             //remove old db records based on agency_key
+            console.log('Removing old DB records');
             async.forEach(GTFSFiles, function (GTFSFile, cb) {
                 db.collection(GTFSFile.collection, function (e, collection) {
                     collection.remove({ agency_key: agency_key }, cb);
@@ -156,6 +158,7 @@ Db.connect(process.env.MONGOHQ_URL, {w: 1}, function (err, db) {
         function importFiles(cb) {
             //Loop through each file and add agency_key
             async.forEachSeries(GTFSFiles, function (GTFSFile, cb) {
+                console.log('Importing file');
                 if (GTFSFile) {
                     var filepath = path.join(downloadDir, GTFSFile.fileNameBase + '.txt');
                     if (!fs.existsSync(filepath)) return cb();
